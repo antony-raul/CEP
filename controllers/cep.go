@@ -3,8 +3,8 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
+	"regexp"
 
 	"github.com/antony-raul/CEP/model"
 	"github.com/gin-gonic/gin"
@@ -19,20 +19,38 @@ func BuscaEnderecoPeloCep(ctx *gin.Context) {
 
 	cep, _ := ctx.Params.Get("cep")
 
+	if !validarCep(cep) {
+		ctx.JSON(400, "cep invalido")
+		return
+	}
+
 	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/%s/json", model.URL, cep), nil)
 	if err != nil {
-		log.Println(err)
+		ctx.JSON(400, err.Error())
+		return
 	}
 
 	response, err := client.Do(request)
 	if err != nil {
-		log.Println(err)
+		ctx.JSON(400, err.Error())
+		return
 	}
 
 	if err = json.NewDecoder(response.Body).Decode(&resCep); err != nil {
-		log.Println(err)
+		ctx.JSON(400, err.Error())
+		return
 	}
 
 	ctx.JSON(200, resCep)
 
+}
+
+func validarCep(cep string) bool {
+	if cep != "" {
+		re := regexp.MustCompile(`^\d{8}$`)
+		val := re.Match([]byte(cep))
+
+		return val
+	}
+	return false
 }
