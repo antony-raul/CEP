@@ -41,6 +41,45 @@ func BuscaEnderecoPeloCep(ctx *gin.Context) {
 		return
 	}
 
+	if resCep.Erro == "true" {
+		ctx.JSON(400, "Erro ao encontrar CEP desejado. Por favor, verifique os dados informados")
+		return
+	}
+
+	ctx.JSON(200, resCep)
+
+}
+
+func BuscaCepsPorLogradouro(ctx *gin.Context) {
+
+	var (
+		client = new(http.Client)
+		resCep []model.Cep
+	)
+
+	query := ctx.Request.URL.Query()
+
+	UF := query.Get("UF")
+	cidade := query.Get("cidade")
+	logradouro := query.Get("logradouro")
+
+	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/%s/%s/%s/json", model.URL, UF, cidade, logradouro), nil)
+	if err != nil {
+		ctx.JSON(400, err.Error())
+		return
+	}
+
+	response, err := client.Do(request)
+	if err != nil {
+		ctx.JSON(400, err.Error())
+		return
+	}
+
+	if err = json.NewDecoder(response.Body).Decode(&resCep); err != nil {
+		ctx.JSON(400, err.Error())
+		return
+	}
+
 	ctx.JSON(200, resCep)
 
 }
