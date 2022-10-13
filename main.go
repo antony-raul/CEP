@@ -9,5 +9,6 @@ func main() {
 	r := gin.Default()
 
 	r.GET("buscar/endereco/:cep", controllers.BuscaEnderecoPeloCep)
+	r.GET("buscar/enderecos", controllers.BuscaCepsPorLogradouro)
 	r.Run()
 }
