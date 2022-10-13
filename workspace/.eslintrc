@@ -1,0 +1,17 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "env": {
+    "es2022": true,
+    "browser": true
+  },
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-console": 1,
+    "@typescript-eslint/no-non-null-assertion": "off"
+  },
+  "ignorePatterns": ["*.js"]
+}
