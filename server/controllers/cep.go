@@ -20,29 +20,29 @@ func BuscaEnderecoPeloCep(ctx *gin.Context) {
 	cep, _ := ctx.Params.Get("cep")
 
 	if !validarCep(cep) {
-		ctx.JSON(400, "cep invalido")
+		ctx.JSON(400, gin.H{"error": "CEP invalido"})
 		return
 	}
 
 	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/%s/json", model.URL, cep), nil)
 	if err != nil {
-		ctx.JSON(400, err.Error())
+		ctx.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
 	response, err := client.Do(request)
 	if err != nil {
-		ctx.JSON(400, err.Error())
+		ctx.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
 	if err = json.NewDecoder(response.Body).Decode(&resCep); err != nil {
-		ctx.JSON(400, err.Error())
+		ctx.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
 	if resCep.Erro == "true" {
-		ctx.JSON(400, "Erro ao encontrar CEP desejado. Por favor, verifique os dados informados")
+		ctx.JSON(400, gin.H{"error": "Erro ao encontrar CEP desejado. Por favor, verifique os dados informados"})
 		return
 	}
 
@@ -65,18 +65,18 @@ func BuscaCepsPorLogradouro(ctx *gin.Context) {
 
 	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/%s/%s/%s/json", model.URL, UF, cidade, logradouro), nil)
 	if err != nil {
-		ctx.JSON(400, err.Error())
+		ctx.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
 	response, err := client.Do(request)
 	if err != nil {
-		ctx.JSON(400, err.Error())
+		ctx.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
 	if err = json.NewDecoder(response.Body).Decode(&resCep); err != nil {
-		ctx.JSON(400, err.Error())
+		ctx.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
