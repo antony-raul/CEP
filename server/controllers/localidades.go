@@ -17,7 +17,7 @@ func ListarEstados(ctx *gin.Context) {
 		resUF  []model.UF
 	)
 
-	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/estados", model.BaseURLLocalidades), nil)
+	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/estados?orderBy=nome", model.BaseURLLocalidades), nil)
 	if err != nil {
 		ctx.JSON(400, gin.H{"error": err.Error()})
 		return
@@ -47,7 +47,7 @@ func ListarCidadesPorEstado(ctx *gin.Context) {
 
 	UF, _ := ctx.Params.Get("uf")
 
-	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/estados/%s/distritos", model.BaseURLLocalidades, UF), nil)
+	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/estados/%s/municipios", model.BaseURLLocalidades, UF), nil)
 	if err != nil {
 		ctx.JSON(400, gin.H{"error": err.Error()})
 		return
