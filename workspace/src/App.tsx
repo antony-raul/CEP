@@ -1,12 +1,12 @@
 import { Menu } from './components';
-import { Home } from './pages';
+import { Entrypoint } from './pages/entrypoint';
 import { GlobalStyle } from './styles/global';
 
 function App() {
   return (
     <div className="App">
       <Menu />
-      <Home />
+      <Entrypoint />
       <GlobalStyle />
     </div>
   );
